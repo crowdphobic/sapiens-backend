@@ -7,6 +7,7 @@ const morgan = require('morgan')
 const dbConnection = require('./src/config/mongoDbConfig')
 const {userController} = require('./src/contoller/user.controller')
 const {validation} = require('./src/config/validator')
+const {token} = require('./src/util/authentication')
 
 //middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -69,7 +70,7 @@ app.post("/user/login", async (req, res)=> {
   http:- PUR
   reposonse:- preference updated message.
 **/
-app.put("/user/preference", async(req, res) =>{
+app.put("/user/preference", token.verify, async(req, res) =>{
   try {
     const validationError = [];
     if(! await validation.emailValidation(req.body.email)) validationError.push("Email is not valid")
